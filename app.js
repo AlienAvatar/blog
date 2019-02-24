@@ -8,6 +8,8 @@ const routes = require('./routes')
 const pkg = require('./package')
 //const formidableMiddleware = require('express-formidable');
 const app = express()
+const winston = require('winston')
+const expressWinston = require('express-winston')
 
 // 设置模板目录
 app.set('views', path.join(__dirname, 'views'))
@@ -50,12 +52,47 @@ app.use(function (req, res, next) {
   res.locals.success = req.flash('success').toString()
   res.locals.error = req.flash('error').toString()
   next()
-})
+});
 
 // 路由
-routes(app)
+app.use(expressWinston.logger({
+    transports:[
+        new(winston.transports.Console)({
+          json:true,
+          colorize:true
+        }),
+        new winston.transports.File({
+          filename:'logs/success.log'
+        })
+    ]
+}));
+
+routes(app);
+
+app.use(expressWinston.errorLogger({
+  transports: [
+      new winston.transports.Console({
+        json:true,
+        colorize:true
+      }),
+      new winston.transports.File({
+        filename:'logs/error.log'
+      })
+  ]
+}));
+app.use(function(err,req,res,next){
+  console.error(err);
+  req.flash('error',err.message);
+  res.redirect('/posts')
+});
+
 
 // 监听端口，启动程序
-app.listen(config.port, function () {
-  console.log(`${pkg.name} listening on port ${config.port}`)
-})
+if(module.parent){
+    //被require,则导出app
+    module.exports = app
+} else{
+    app.listen(config.port, function () {
+        console.log(`${pkg.name} listening on port ${config.port}`)
+    });
+}
