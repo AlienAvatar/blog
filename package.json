@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
-    "test": "istanbul cover node_modules/mocha/bin/_mocha"
+    "start": "istanbul cover _mocha",
+    "test": "cross-env NODE_ENV=production pm2 start app.js --name 'myblog'"
   },
   "dependencies": {
     "config-lite": "^2.1.0",
@@ -27,6 +27,7 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
+    "cross-env": "^5.2.0",
     "istanbul": "^0.4.5",
     "mocha": "^6.0.1",
     "supertest": "^3.4.2"
