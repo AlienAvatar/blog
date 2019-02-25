@@ -91,6 +91,22 @@ router.get('/:postId', function (req, res, next) {
         .catch(next)
 })
 
+//点赞
+router.get('/:postId/like',checkLogin,function (req,res,next) {
+    const postId = req.params.postId
+
+    PostModel.addLike(postId)
+        .then(function (post) {
+            if (!post) {
+                throw new Error('该文章不存在')
+            }
+            res.render('like',{
+                post:post
+            })
+        })
+        .catch(next)
+})
+
 // GET /posts/:postId/edit 更新文章页
 router.get('/:postId/edit', checkLogin, function (req, res, next) {
     const postId = req.params.postId

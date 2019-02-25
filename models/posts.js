@@ -78,6 +78,14 @@ module.exports = {
             .update({ _id: postId }, { $inc: { pv: 1 } })
             .exec()
     },
+
+    //点赞
+    addLike:function addLike(postId){
+        return Post
+            .update({_id:postId}),{$li:{like:1}}
+            .exec()
+    },
+
     // 通过文章 id 获取一篇原生文章（编辑文章）
     getRawPostById: function getRawPostById (postId) {
         return Post
