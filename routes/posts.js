@@ -3,6 +3,7 @@ const router = express.Router()
 const checkLogin = require('../middlewares/check').checkLogin
 const PostModel = require('../models/posts')
 const CommentModel = require('../models/comments')
+const UserModel = require('../models/users')
 
 // GET /posts 所有用户或者特定用户的文章页
 //   eg: GET /posts?author=xxx
@@ -93,19 +94,23 @@ router.get('/:postId', function (req, res, next) {
 
 //点赞
 router.get('/:postId/like',checkLogin,function (req,res,next) {
-    const postId = req.params.postId
+    //postId 是文章Id
 
-    PostModel.addLike(postId)
-        .then(function (post) {
-            if (!post) {
-                throw new Error('该文章不存在')
-            }
-            res.render('like',{
-                post:post
+    const postId = req.params.postId;
+    const user = UserModel.getUserById(req.params.postId)
+    /*if(user.checkLike == 'false') {*/
+        PostModel.addLike(postId)
+            .then(function () {
+                /*if (!post) {
+                    throw new Error('该文章不存在')
+                }*/
+
+                //req.flash('success', '点赞成功')
+                res.redirect('/posts')
             })
-        })
-        .catch(next)
-})
+            .catch(next)
+    /*}*/
+ });
 
 // GET /posts/:postId/edit 更新文章页
 router.get('/:postId/edit', checkLogin, function (req, res, next) {

@@ -20,9 +20,9 @@ router.post('/', checkNotLogin, function (req, res, next) {
     const avatar = req.files.avatar.path.split(path.sep).pop()
     let password = req.fields.password
     const repassword = req.fields.repassword
-
+    const checkLike = 'false';
     // 校验参数
-    try {
+    /*try {
         if (!(name.length >= 1 && name.length <= 10)) {
             throw new Error('名字请限制在 1-10 个字符')
         }
@@ -46,7 +46,7 @@ router.post('/', checkNotLogin, function (req, res, next) {
         fs.unlink(req.files.avatar.path)
         req.flash('error', e.message)
         return res.redirect('/signup')
-    }
+    }*/
 
     // 明文密码加密
     password = sha1(password)
@@ -57,7 +57,8 @@ router.post('/', checkNotLogin, function (req, res, next) {
         password: password,
         gender: gender,
         bio: bio,
-        avatar: avatar
+        avatar: avatar,
+        checkLike:checkLike
     }
     // 用户信息写入数据库
     UserModel.create(user)

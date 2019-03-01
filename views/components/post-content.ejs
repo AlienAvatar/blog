@@ -16,7 +16,7 @@
                 <div>
                     <span class="tag"><%= post.created_at %></span>
                     <span class="tag right">
-            <span >点赞<a id="like" href="/posts/<%=post.id%>">(<%= post.like || 0 %>)</a></span>
+            <span>点赞<a href="/posts/<%= post._id %>/like">(<%= post.like || 0 %>)</a></span>
             <span>浏览(<%= post.pv || 0 %>)</span>
             <span>留言(<%= post.commentsCount || 0 %>)</span>
 
