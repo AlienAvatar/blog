@@ -9,6 +9,7 @@ module.exports = function (app) {
   app.use('/signout', require('./signout.js'))
   app.use('/posts', require('./posts'))
   app.use('/comments', require('./comments'))
+  app.use('/setting',require('./setting'))
 
   app.use(function(req,res){
       if(!res.headersSent){
